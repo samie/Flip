@@ -1,6 +1,10 @@
 # Flip - 3D flip effect for Vaadin components
 
-With *Flip* extension you can create two sides for your layout. 
+With Flip extension you can create two sides for your Vaadin layout and components. The addon features a horizontal 3D turning effect. Mouse click and hover triggers are supported as well as programmatic flipping.
+
+## Get Flip
+
+Download or use Flip with Maven at: https://vaadin.com/addon/flip
 
 ## Online demo
 
@@ -10,7 +14,7 @@ Try the add-on demo at http://sami.app.fi/flip
 ## Release notes
 
 ### Version 1.0
-- Horizontal flip
+- Horizontal 3D flip effect
 - Flip on hover and mouse click
 - Server-side API for flip
 
