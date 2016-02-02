@@ -1,4 +1,4 @@
-# Flip - User inactivity tracking for Vaadin
+# Flip - 3D flip effect for Vaadin components
 
 With *Flip* extension you can create two sides for your layout. 
 
@@ -10,8 +10,9 @@ Try the add-on demo at http://sami.app.fi/flip
 ## Release notes
 
 ### Version 1.0
-- Server-side API for flip/resume
-
+- Horizontal flip
+- Flip on hover and mouse click
+- Server-side API for flip
 
 ## Issue tracking
 
