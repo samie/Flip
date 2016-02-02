@@ -68,8 +68,14 @@ public class Flip extends CustomComponent {
             this.flip();
         });
         flipper.addComponent(flipBack);
-        
+
         setFlipMode(FlipMode.MANUAL);
+    }
+
+    public Flip(Component frontSide, Component backSide) {
+        this();
+        setFrontComponent(frontSide);
+        setBackComponent(backSide);
     }
 
     public Flip(Component frontSide, Component backSide, FlipMode flipMode) {
