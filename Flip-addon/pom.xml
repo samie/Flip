@@ -125,7 +125,7 @@
                             <!-- Package format version - do not change -->
                             <Vaadin-Package-Version>1</Vaadin-Package-Version>
                             <Vaadin-License-Title>${Vaadin-License-Title}</Vaadin-License-Title>
-                            <Vaadin-Stylesheets>/VAADIN/themes/flip-addon/flip.scss</Vaadin-Stylesheets>
+                            <!-- Vaadin-Stylesheets>/VAADIN/themes/flip-addon/flip.scss</Vaadin-Stylesheets -->
                         </manifestEntries>
                     </archive>
                 </configuration>
