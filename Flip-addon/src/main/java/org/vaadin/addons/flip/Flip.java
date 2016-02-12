@@ -59,13 +59,19 @@ public class Flip extends CustomComponent {
         flipper.setSizeFull();
         root.addComponent(flipper);
 
-        flipFront.addClickListener(e -> {
-            this.flip();
+        flipFront.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                flip();
+            }
         });
         flipper.addComponent(flipFront);
 
-        flipBack.addClickListener(e -> {
-            this.flip();
+        flipBack.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                flip();
+            }
         });
         flipper.addComponent(flipBack);
 
@@ -101,9 +107,9 @@ public class Flip extends CustomComponent {
         }
 
         // Notify listeners
-        flipListeners.forEach(l -> {
+        for (FlipListener l : new ArrayList<>(flipListeners)) {
             l.flipped(this);
-        });
+        };
 
     }
 
