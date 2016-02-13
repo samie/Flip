@@ -22,7 +22,7 @@ import javax.servlet.annotation.WebServlet;
 
 import org.vaadin.addons.flip.Flip;
 
-@Theme("demo")
+@Theme("valo")
 @Title("Flip Add-on Demo")
 @SuppressWarnings("serial")
 public class DemoUI extends UI {
