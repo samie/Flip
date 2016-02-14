@@ -15,7 +15,7 @@
 .flip-container .front {
     position: absolute;        
     backface-visibility: hidden;
-    transform: rotateY(0deg) translate3d(0,0,2px);  /* for firefox 31 */
+    transform: rotateY(0deg);  /* for firefox 31 */
 }        
 
 .flip-container .back {
