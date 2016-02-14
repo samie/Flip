@@ -190,11 +190,11 @@ public class Flip extends CustomComponent {
     public void setFlipMode(FlipMode flipMode) {
         this.flipMode = flipMode;
         root.removeStyleName("hoverflip");
-        root.removeStyleName("flipped");
         flipFront.setVisible(flipMode == FlipMode.BUTTON);
         flipBack.setVisible(flipMode == FlipMode.BUTTON);
         flipper.removeLayoutClickListener(clickListener);
         if (this.flipMode == FlipMode.ON_HOVER) {
+            root.removeStyleName("flipped");
             root.addStyleName("hoverflip");
         } else if (this.flipMode == FlipMode.ON_CLICK) {
             flipper.addLayoutClickListener(clickListener);
