@@ -6,13 +6,18 @@
     <artifactId>flip-demo</artifactId>
     <packaging>war</packaging>
     <name>Flip - Demo</name>
-    <version>1.0.4</version>
+    <version>2.0.0-SNAPSHOT</version>
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <vaadin.version>7.6.2</vaadin.version>
+        <vaadin.version>8.0.6</vaadin.version>
+        <jetty.plugin.version>9.4.6.v20170531</jetty.plugin.version>
         <vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
     </properties>
+
+    <prerequisites>
+        <maven>3</maven>
+    </prerequisites>
 
     <organization>
         <name>Sami Ekblad</name>
@@ -44,36 +49,19 @@
             <id>vaadin-addons</id>
             <url>http://maven.vaadin.com/vaadin-addons</url>
         </repository>
-        <repository>
-            <id>vaadin-snapshots</id>
-            <url>http://oss.sonatype.org/content/repositories/vaadin-snapshots/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
     </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>vaadin-snapshots</id>
-            <url>http://oss.sonatype.org/content/repositories/vaadin-snapshots/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
 
     <dependencies>
         <dependency>
             <groupId>org.vaadin.se.addons</groupId>
             <artifactId>flip</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-client-compiler</artifactId>
+            <version>${vaadin.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
@@ -93,7 +81,7 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>3.0.1</version>
+            <version>3.1.0</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -102,46 +90,9 @@
         <plugins>
 
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.0</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <artifactId>maven-clean-plugin</artifactId>
-                <version>2.4.1</version>
-                <configuration>
-                    <filesets>
-                        <fileset>
-                            <!-- Clean-up widgetset required for "inplace" compilation -->
-                            <directory>${basedir}/src/main/webapp/VAADIN/widgetsets</directory>
-                        </fileset>
-                        <fileset>
-                            <!-- Clean-up gwt cache -->
-                            <directory>${basedir}/src/main/webapp/VAADIN/gwt-unitCache</directory>
-                        </fileset>
-                    </filesets>
-                </configuration>
-            </plugin>
-
-            <plugin>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>2.3</version>
+                <version>3.1.0</version>
                 <configuration>
-                    <packagingExcludes>
-                        **/VAADIN/gwt-unitCache/**,
-                        **/VAADIN/widgetsets/WEB-INF/**,
-                        **/WEB-INF/lib/servlet-api-*.jar,
-                        **/WEB-INF/lib/jetty-*.jar,
-                        **/WEB-INF/lib/ant-*.jar,
-                        **/WEB-INF/classes/gwt-unitCache/**,
-                        **/WEB-INF/classes/themes/**,
-                        **/WEB-INF/classes/widgetsets/**
-                    </packagingExcludes>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
@@ -150,16 +101,6 @@
                 <groupId>com.vaadin</groupId>
                 <artifactId>vaadin-maven-plugin</artifactId>
                 <version>${vaadin.plugin.version}</version>
-                <configuration>
-                    <extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
-                    <webappDirectory>${basedir}/src/main/webapp/VAADIN/widgetsets</webappDirectory>
-                    <hostedWebapp>${basedir}/src/main/webapp/VAADIN/widgetsets</hostedWebapp>
-                    <noServer>true</noServer>
-                    <persistentunitcachedir>${basedir}/target/tmp/gwt-unitCache</persistentunitcachedir>
-                    <compileReport>true</compileReport>
-                    <strict>true</strict>
-                    <runTarget>http://localhost:8080/Flip</runTarget>
-                </configuration>
                 <executions>
                     <!-- You are free to mark this as permanently ignored in Eclipse -->
                     <execution>
@@ -168,16 +109,19 @@
                         </configuration>
                         <goals>
                             <goal>resources</goal>
+                            <goal>update-widgetset</goal>
                             <goal>compile</goal>
+                            <goal>compile-theme</goal>
+                            <goal>update-theme</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
 
             <plugin>
-                <groupId>org.mortbay.jetty</groupId>
+                <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
-                <version>8.1.10.v20130312</version>
+                <version>${jetty.plugin.version}</version>
                 <configuration>
                     <webApp>
                         <contextPath>/Flip</contextPath>
@@ -185,45 +129,16 @@
                     <scanIntervalSeconds>5</scanIntervalSeconds>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
 
         </plugins>
-	
-        <pluginManagement>
-            <plugins>
-                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-                <plugin>
-                    <groupId>org.eclipse.m2e</groupId>
-                    <artifactId>lifecycle-mapping</artifactId>
-                    <version>1.0.0</version>
-                    <configuration>
-                        <lifecycleMappingMetadata>
-                            <pluginExecutions>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>com.vaadin</groupId>
-                                        <artifactId>vaadin-maven-plugin</artifactId>
-                                        <versionRange>
-                                            [${vaadin.plugin.version},)
-                                        </versionRange>
-                                        <goals>
-                                            <goal>resources</goal>
-                                            <goal>update-widgetset</goal>
-                                            <goal>compile</goal>
-                                            <goal>update-theme</goal>
-                                            <goal>compile-theme</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <ignore></ignore>
-                                    </action>
-                                </pluginExecution>
-                            </pluginExecutions>
-                        </lifecycleMappingMetadata>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-
     </build>
 
 </project>
