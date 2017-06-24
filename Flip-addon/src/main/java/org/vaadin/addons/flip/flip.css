@@ -13,13 +13,15 @@
 
 /* hide back of pane during swap */
 .flip-container .front {
-    position: absolute;        
+    position: absolute;     
+    -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     transform: rotateY(0deg);  /* for firefox 31 */
 }        
 
 .flip-container .back {
-    position: absolute;        
+    position: absolute;   
+    -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     transform: rotateY(180deg);
 }
