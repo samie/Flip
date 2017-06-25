@@ -12,6 +12,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.UI;
@@ -20,9 +21,6 @@ import java.util.Arrays;
 import javax.servlet.annotation.WebServlet;
 
 import org.vaadin.addons.flip.Flip;
-import org.vaadin.addons.flip.Flip.FlipMode;
-
-import static java.util.stream.Collectors.toList;
 
 @Theme("valo")
 @Title("Flip Add-on Demo")
@@ -31,6 +29,7 @@ public class DemoUI extends UI {
 
     private Flip flip;
     private Button flipButton;
+    private ComboBox modeSelect;
 
     @WebServlet(value = "/*", asyncSupported = true)
     @VaadinServletConfiguration(productionMode = false, ui = DemoUI.class)
@@ -49,16 +48,17 @@ public class DemoUI extends UI {
         baseLayout.setSizeFull();
         demos.addTab(baseLayout, "Flip modes");
 
-        flipButton = new Button("Flip", e -> flip.flip());
+        flipButton = new Button("Flip", e -> {
+            flip.flip();
+        });
         baseLayout.addComponent(flipButton, "top:24px; left:20px;");
 
-        FlipMode manualMode = FlipMode.MANUAL;
-        ComboBox<FlipMode> modeSelect = new ComboBox<>("Mode",
-                Arrays.stream(FlipMode.values()).filter(flipMode -> !FlipMode.BUTTON.equals(flipMode)).collect(toList()));
-        modeSelect.setValue(manualMode);
+        modeSelect = new ComboBox("Mode", Arrays.asList(Flip.FlipMode.values()));
+        modeSelect.removeItem(Flip.FlipMode.BUTTON); //TODO
+        modeSelect.setValue(Flip.FlipMode.MANUAL);
         modeSelect.addValueChangeListener(v -> {
-            flip.setFlipMode(v.getValue());
-            flipButton.setEnabled(!FlipMode.ON_HOVER.equals(flip.getFlipMode()));
+            flip.setFlipMode((Flip.FlipMode) v.getProperty().getValue());
+            flipButton.setEnabled(flip.getFlipMode() != Flip.FlipMode.ON_HOVER);
         });
         baseLayout.addComponent(modeSelect, "top:24px; right:20px;");
 
@@ -72,7 +72,7 @@ public class DemoUI extends UI {
         // Back content
         Image back = new Image(null, new ExternalResource("http://40.media.tumblr.com/d84b66411606d07649477c844b511211/tumblr_nrllea5ka01rebadho1_400.jpg"));
 
-        flip = new Flip(front, back, manualMode);
+        flip = new Flip(front, back, Flip.FlipMode.MANUAL);
         flip.setHeight("400px");
         flip.setWidth("400px");
         layout.addComponent(flip);
@@ -81,5 +81,7 @@ public class DemoUI extends UI {
         });
 
         layout.setComponentAlignment(flip, Alignment.MIDDLE_CENTER);
+
     }
+
 }
