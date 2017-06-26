@@ -40,13 +40,7 @@ public class Flip extends CustomComponent {
     private final Button flipFront = new Button(FontAwesome.COG);
     private final Button flipBack = new Button(FontAwesome.COG);
 
-    private final LayoutEvents.LayoutClickListener clickListener = new LayoutEvents.LayoutClickListener() {
-
-        @Override
-        public void layoutClick(LayoutEvents.LayoutClickEvent event) {
-            flip();
-        }
-    };
+    private final LayoutEvents.LayoutClickListener clickListener = event -> flip();
 
     private List<FlipListener> flipListeners = new ArrayList<>();
 
@@ -59,20 +53,10 @@ public class Flip extends CustomComponent {
         flipper.setSizeFull();
         root.addComponent(flipper);
 
-        flipFront.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                flip();
-            }
-        });
+        flipFront.addClickListener(event -> flip());
         flipper.addComponent(flipFront);
 
-        flipBack.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                flip();
-            }
-        });
+        flipBack.addClickListener(event -> flip());
         flipper.addComponent(flipBack);
 
         setFlipMode(FlipMode.MANUAL);
@@ -107,9 +91,7 @@ public class Flip extends CustomComponent {
         }
 
         // Notify listeners
-        for (FlipListener l : new ArrayList<>(flipListeners)) {
-            l.flipped(this);
-        };
+        flipListeners.forEach(flipListener -> flipListener.flipped(this));
 
     }
 
@@ -135,10 +117,19 @@ public class Flip extends CustomComponent {
      */
     public enum FlipMode {
 
-        ON_CLICK,
-        ON_HOVER,
-        BUTTON,
-        MANUAL
+        ON_CLICK("On Click"),
+        ON_HOVER("On Hover"),
+        BUTTON("Button"),
+        MANUAL("Manual");
+        
+        private final String caption;
+        private FlipMode(String caption) {
+            this.caption = caption;
+        }
+        
+        public String getCaption() {
+            return caption;
+        }
     }
 
     public void addFlipListener(FlipListener listener) {
@@ -153,7 +144,7 @@ public class Flip extends CustomComponent {
         return front;
     }
 
-    public void setFrontComponent(Component frontSide) {
+    public final void setFrontComponent(Component frontSide) {
         if (this.front != null) {
             flipper.removeComponent(this.front);
         }
@@ -166,7 +157,7 @@ public class Flip extends CustomComponent {
         return back;
     }
 
-    public void setBackComponent(Component backSide) {
+    public final void setBackComponent(Component backSide) {
         if (this.back != null) {
             flipper.removeComponent(this.back);
         }
@@ -187,7 +178,7 @@ public class Flip extends CustomComponent {
         return flipMode;
     }
 
-    public void setFlipMode(FlipMode flipMode) {
+    public final void setFlipMode(FlipMode flipMode) {
         this.flipMode = flipMode;
         root.removeStyleName("hoverflip");
         flipFront.setVisible(flipMode == FlipMode.BUTTON);
